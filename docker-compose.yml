@@ -1,0 +1,26 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:11.2-alpine
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+  api:
+    build: .
+    depends_on:
+      - postgres
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/node/app
+      -  /home/node/app/node_modules
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+      PORT: 3000
